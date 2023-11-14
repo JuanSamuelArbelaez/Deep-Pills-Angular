@@ -22,8 +22,13 @@ export class PswdRecoveryRequest {
     console.log("Serving... ", email);
     this.pswdService.requestPasswordRecovery(email).subscribe(
       response => {
-        console.log(response.message)
+        console.log(response.message);
         alert(response.message);
+  
+        // Check if there's a redirect URL in the response
+        if (response.redirectUrl) {
+          window.location.href = response.redirectUrl;
+        }
       },
       error => {
         console.error('Password recovery failed:', error);
@@ -32,4 +37,3 @@ export class PswdRecoveryRequest {
     );
   }
 }
-

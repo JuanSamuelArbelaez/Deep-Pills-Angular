@@ -5,7 +5,8 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:8080/deep_pills/api'
+  apiBaseUrl: 'http://localhost:8080/deep_pills/api',
+
 };
 
 /*

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { Title, Meta } from '@angular/platform-browser'
 import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'log-in',
@@ -8,7 +9,7 @@ import { AuthenticationService } from '../../services/authentication.service';
   styleUrls: ['log-in.component.css'],
 })
 export class LogIn {
-  constructor(private title: Title, private meta: Meta, private authService: AuthenticationService) {
+  constructor(private title: Title, private meta: Meta, private authService: AuthenticationService, private router: Router) {
     this.title.setTitle('Log In - Deep Pills')
     this.meta.addTags([
       {
@@ -21,7 +22,27 @@ export class LogIn {
   onLogin(email: string, password: string): void {
     this.authService.login(email, password).subscribe(
       (response) => {
-        // Manejar la respuesta exitosa aquí
+        // Extraer el token del cuerpo de la respuesta
+        const token = response.token;
+  
+        // Determinar el rol del usuario (patient, physician, admin)
+        const userRole = token.role;
+  
+        // Redirigir a la página correspondiente según el rol
+        switch (userRole) {
+          case 'patient':
+            this.router.navigate(['/patient-dashboard']);
+            break;
+          case 'physician':
+            this.router.navigate(['/physician-dashboard']);
+            break;
+          case 'admin':
+            this.router.navigate(['/admin-dashboard']);
+            break;
+          default:
+            console.error('Unknown role:', userRole);
+        }
+  
         console.log('Login successful', response);
       },
       (error) => {

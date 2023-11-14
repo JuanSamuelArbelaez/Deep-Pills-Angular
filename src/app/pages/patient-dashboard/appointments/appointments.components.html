@@ -1,0 +1,13 @@
+<!-- appointments.component.html -->
+<div *ngIf="appointments && appointments.length > 0">
+    <h2>Appointments Content</h2>
+    <table>
+      <!-- Display your appointment data in a table -->
+      <tr *ngFor="let appointment of appointments">
+        <td>{{ appointment.property1 }}</td>
+        <td>{{ appointment.property2 }}</td>
+        <!-- Add more columns as needed -->
+      </tr>
+    </table>
+  </div>
+  

@@ -38,6 +38,7 @@ const routes = [
       import('./pages/pswd-recovery-request/pswd-recovery-request.module').then(
         (m) => m.PswdRecoveryRequestModule
       ),
+      
   },
   {
     path: '**',

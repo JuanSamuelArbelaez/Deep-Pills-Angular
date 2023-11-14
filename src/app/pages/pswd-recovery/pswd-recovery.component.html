@@ -57,43 +57,19 @@
         </nav>
       </div>
     </div>
-    <a routerLink="/home" class="pswd-recovery-home button button-main">
+    <a routerLink="" class="pswd-recovery-home button button-main">
       <span class="pswd-recovery-text05">Home</span>
     </a>
   </header>
   <div class="pswd-recovery-main">
     <h1 class="pswd-recovery-text06">Security PIN here!</h1>
     <div class="pswd-recovery-pins">
-      <input
-        type="text"
-        placeholder="-"
-        class="pswd-recovery-textinput input"
-      />
-      <input
-        type="text"
-        placeholder="-"
-        class="pswd-recovery-textinput1 input"
-      />
-      <input
-        type="text"
-        placeholder="-"
-        class="pswd-recovery-textinput2 input"
-      />
-      <input
-        type="text"
-        placeholder="-"
-        class="pswd-recovery-textinput3 input"
-      />
-      <input
-        type="text"
-        placeholder="-"
-        class="pswd-recovery-textinput4 input"
-      />
-      <input
-        type="text"
-        placeholder="-"
-        class="pswd-recovery-textinput5 input"
-      />
+      <input #inputField1 type="text" placeholder="-" class="pswd-recovery-textinput input" />
+      <input #inputField2 type="text" placeholder="-" class="pswd-recovery-textinput1 input" />
+      <input #inputField3 type="text" placeholder="-" class="pswd-recovery-textinput2 input" />
+      <input #inputField4 type="text" placeholder="-" class="pswd-recovery-textinput3 input" />
+      <input #inputField5 type="text" placeholder="-" class="pswd-recovery-textinput4 input" />
+      <input #inputField6 type="text" placeholder="-" class="pswd-recovery-textinput5 input" />
     </div>
     <div class="pswd-recovery-inputs">
       <input
@@ -102,17 +78,19 @@
         placeholder="New Password"
         autocomplete="tel"
         class="input book-input"
+        [(ngModel)]="password"
       />
       <input
         type="password"
         required
         placeholder="Confirm your New Password"
         class="input book-input"
+        [(ngModel)]="confirmPassword"
       />
       <div class="pswd-recovery-lower">
         <p class="pswd-recovery-text07">Please fill all the fields.</p>
         <div class="pswd-recovery-button">
-          <button class="pswd-recovery-book1 button button-main">
+          <button class="pswd-recovery-book1 button button-main" (click)="onSubmit()">
             <span>Change my Password</span>
           </button>
         </div>

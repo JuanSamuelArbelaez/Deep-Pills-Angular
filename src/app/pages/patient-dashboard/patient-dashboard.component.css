@@ -262,6 +262,11 @@
   font-style: normal;
   font-weight: 600;
 }
+.patient-dashboard-links1 a.active {
+  /* Estilos para la pestaña activa */
+  color: #007bff; /* Puedes cambiar el color según tu diseño */
+  font-weight: bold;
+}
 .patient-dashboard-links1 {
   gap: 12px;
   width: 100%;

@@ -8,10 +8,9 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthenticationService {
   private baseUrl = environment.apiBaseUrl
-
   constructor(private http: HttpClient) { }
   login(email: string, password: string): Observable<any> {
     const loginData = { email, password };
-    return this.http.post(`${this.baseUrl}/deep_pills/api/auth/login`, loginData);
+    return this.http.post(`${this.baseUrl}auth/login`, loginData);
   }
 }
