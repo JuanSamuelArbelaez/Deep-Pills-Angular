@@ -52,7 +52,7 @@
           <span class="pswd-recovery-request-text01">How it works</span>
           <span class="pswd-recovery-request-text02">Prices</span>
           <span class="pswd-recovery-request-text03">Contact</span>
-          <a href="#book" class="pswd-recovery-request-book button button-main">
+          <a href="" class="pswd-recovery-request-book button button-main">
             <img
               alt="image"
               src="/assets/external/calendar.svg"
@@ -65,7 +65,7 @@
         </nav>
       </div>
     </div>
-    <a routerLink="/" class="pswd-recovery-request-book1 button button-main">
+    <a routerLink="" class="pswd-recovery-request-book1 button button-main">
       <span class="pswd-recovery-request-text05">Home</span>
     </a>
   </header>
@@ -79,18 +79,13 @@
             placeholder="Email"
             autocomplete="email"
             class="input book-input"
+            #emailInput
           />
           <div class="pswd-recovery-request-lower">
             <div class="pswd-recovery-request-button">
-              <button class="pswd-recovery-request-book2 button button-main">
+              <button class="pswd-recovery-request-book2 button button-main" (click)="handlePasswordRecovery(emailInput.value)">
                 <span>Send Password Recovery Request</span>
               </button>
-            </div>
-            <div class="pswd-recovery-request-container3">
-              <p class="pswd-recovery-request-text07">Dont have an Account? </p>
-              <a routerLink="/" class="pswd-recovery-request-navlink1">
-                <p class="pswd-recovery-request-text08">Register Now</p>
-              </a>
             </div>
           </div>
         </div>
@@ -119,10 +114,10 @@
       <div class="pswd-recovery-request-list">
         <span class="pswd-recovery-request-header">Menu</span>
         <div class="pswd-recovery-request-links">
-          <a routerLink="/" class="pswd-recovery-request-link">Home</a>
-          <a routerLink="/" class="pswd-recovery-request-link1">Login</a>
-          <a routerLink="/" class="pswd-recovery-request-link2">Register</a>
-          <a routerLink="/" class="pswd-recovery-request-link3">Policies</a>
+          <a href="" class="home-link05">Home</a>
+          <a routerLink="/log-in" class="home-link06">Login</a>
+          <a href="#register" class="home-link07">Register</a>
+          <a href="#policies" class="home-link08">Policies</a>
         </div>
       </div>
       <div class="pswd-recovery-request-list1">

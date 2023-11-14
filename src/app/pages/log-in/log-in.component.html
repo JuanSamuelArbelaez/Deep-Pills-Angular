@@ -37,7 +37,7 @@
             <span class="log-in-text01">How it works</span>
             <span class="log-in-text02">Prices</span>
             <span class="log-in-text03">Contact</span>
-            <a href="#book" class="log-in-book button button-main">
+            <a href="" class="log-in-book button button-main">
               <img
                 alt="image"
                 src="/assets/external/calendar.svg"
@@ -48,7 +48,7 @@
           </nav>
         </div>
       </div>
-      <a routerLink="/" class="log-in-home button button-main">
+      <a routerLink="" class="log-in-home button button-main">
         <span class="log-in-text05">Home</span>
       </a>
     </header>
@@ -68,6 +68,7 @@
               placeholder="Email"
               autocomplete="email"
               class="input book-input"
+              #emailInput
             />
             <input
               type="password"
@@ -75,15 +76,17 @@
               placeholder="Password"
               autocomplete="tel"
               class="input book-input"
+              #passwordInput
+
             />
             <div class="log-in-lower">
               <p class="log-in-text06">Please fill all the fields.</p>
-              <button class="log-in-log-in button button-main">
+              <button class="log-in-log-in button button-main" (click)="onLogin(emailInput.value, passwordInput.value)>
                 <span>Log In</span>
               </button>
               <div class="log-in-container3">
                 <p class="log-in-text08">Dont have an Account? </p>
-                <a routerLink="/" class="log-in-navlink1">
+                <a routerLink="" class="log-in-navlink2">
                   <p class="log-in-text09">Register Now</p>
                 </a>
               </div>
@@ -119,10 +122,10 @@
       <div class="log-in-list">
         <span class="log-in-header">Menu</span>
         <div class="log-in-links">
-          <a href="#home" class="log-in-link">Home</a>
-          <span class="log-in-link1">Login</span>
-          <a href="#register" class="log-in-link2">Register</a>
-          <a href="#policies" class="log-in-link3">Policies</a>
+          <a href="" class="home-link05">Home</a>
+          <a routerLink="/log-in" class="home-link06">Login</a>
+          <a href="#register" class="home-link07">Register</a>
+          <a href="#policies" class="home-link08">Policies</a>
         </div>
       </div>
       <div class="log-in-list1"></div>

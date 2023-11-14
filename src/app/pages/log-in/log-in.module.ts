@@ -17,4 +17,5 @@ const routes = [
   exports: [LogIn],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
+
 export class LogInModule {}

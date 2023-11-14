@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
 import { Title, Meta } from '@angular/platform-browser'
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'log-in',
@@ -7,7 +8,7 @@ import { Title, Meta } from '@angular/platform-browser'
   styleUrls: ['log-in.component.css'],
 })
 export class LogIn {
-  constructor(private title: Title, private meta: Meta) {
+  constructor(private title: Title, private meta: Meta, private authService: AuthenticationService) {
     this.title.setTitle('Log In - Deep Pills')
     this.meta.addTags([
       {
@@ -15,5 +16,18 @@ export class LogIn {
         content: 'Log In - Deep Pills',
       },
     ])
+  }
+  
+  onLogin(email: string, password: string): void {
+    this.authService.login(email, password).subscribe(
+      (response) => {
+        // Manejar la respuesta exitosa aquí
+        console.log('Login successful', response);
+      },
+      (error) => {
+        // Manejar el error aquí
+        console.error('Login error', error);
+      }
+    );
   }
 }
