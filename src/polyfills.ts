@@ -37,10 +37,7 @@
 
 // Add the following lines to include the required polyfills
 import 'core-js/features/reflect';
-import 'zone.js';  // Included with Angular CLI.
-import 'crypto-browserify';
-import 'util';
-import 'stream-browserify';
+import 'zone.js'; 
 
 (window as any).global = window;
 

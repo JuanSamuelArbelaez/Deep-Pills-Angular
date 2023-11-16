@@ -1,75 +1,304 @@
+<link href="https://cdn.jsdelivr.net/npm/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet">
+
 <div class="patient-dashboard-container">
-  <section id="home" class="patient-dashboard-hero">
+  <section id="main" class="patient-dashboard-hero">
     <header data-thq="thq-navbar" class="patient-dashboard-navbar">
       <div class="patient-dashboard-left">
-        <img
-          alt="image"
-          src="/assets/external/logo-1500h-1500h.png"
-          class="patient-dashboard-logo"
-        />
+        <a href="/" target="_blank" rel="noreferrer noopener" class="patient-dashboard-link">
+          <img alt="image" src="/assets/external/logo-1500h-1500h.png" class="patient-dashboard-logo">
+        </a>
         <nav class="patient-dashboard-links">
-          <a routerLink="/patient-dashboard/profile" class="home-link05">Profile</a>
-          <a routerLink="/patient-dashboard/appointments" class="home-link06">Appointments</a>
-          <a routerLink="/patient-dashboard/claims" class="home-link07">Claims</a>
-          <a routerLink="/patient-dashboard/memberships" class="home-link08">Memberships</a>
-          <a routerLink="" class="home-link09">LogOut</a>
-          <!-- Agrega más enlaces según sea necesario -->
+          <a href="#profile" class="patient-dashboard-link01">Profile</a>
+          <a href="#appointments" class="patient-dashboard-link02">Appointments</a>
+          <a href="#claims" class="patient-dashboard-link03">Claims</a>
+          <a href="#memberships" class="patient-dashboard-link04">Memberships</a>
         </nav>
       </div>
       <div data-thq="thq-navbar-btn-group" class="patient-dashboard-right">
-        <!-- Resto del código... -->
+        <button class="patient-dashboard-phone button">
+          <svg viewBox="0 0 1024 1024" class="patient-dashboard-icon">
+            <path d="M128 337.963l359.552 251.691c14.507 10.027 33.92 10.496 48.939 0l359.509-251.691v430.037c0 11.605-4.693 22.229-12.587 30.080s-18.475 12.587-30.080 12.587h-682.667c-11.605 0-22.229-4.693-30.080-12.587s-12.587-18.475-12.587-30.080zM42.667 256.512v511.488c0 35.328 14.507 67.371 37.547 90.453s55.125 37.547 90.453 37.547h682.667c35.328 0 67.371-14.507 90.453-37.547s37.547-55.125 37.547-90.453v-511.488c0-0.427 0-0.853 0-1.28-0.213-35.029-14.635-66.773-37.547-89.685-23.083-23.040-55.125-37.547-90.453-37.547h-682.667c-35.328 0-67.371 14.507-90.453 37.547-22.912 22.912-37.333 54.656-37.547 89.728 0 0.213 0 0.469 0 0.725zM891.477 236.971l-379.477 265.6-379.477-265.6c2.048-4.096 4.779-7.808 8.021-11.051 7.893-7.893 18.517-12.587 30.123-12.587h682.667c11.605 0 22.229 4.693 30.080 12.587 3.243 3.243 5.973 6.997 8.021 11.051z"></path>
+          </svg>
+          <a href="mailto:deep.pills.org&#64;gmail.com?subject=Main" class="patient-dashboard-link05">deep.pills.org&#64;gmail.com</a>
+        </button>
+        <button class="patient-dashboard-log-in button button-main">
+          <span class="patient-dashboard-text">Log Out</span>
+        </button>
       </div>
       <div data-thq="thq-burger-menu" class="patient-dashboard-burger-menu">
-        <!-- Resto del código... -->
+        <svg viewBox="0 0 1024 1024" class="patient-dashboard-icon2">
+          <path d="M128 554.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 298.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667zM128 810.667h768c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-768c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667z"></path>
+        </svg>
       </div>
       <div data-thq="thq-mobile-menu" class="patient-dashboard-mobile-menu">
-        <!-- Resto del código... -->
+        <div data-thq="thq-mobile-menu-nav" data-role="Nav" class="patient-dashboard-nav">
+          <div class="patient-dashboard-container1">
+            <img alt="image" src="/assets/external/logo-1500h-1500h.png" class="patient-dashboard-image">
+            <div data-thq="thq-close-menu" class="patient-dashboard-menu-close">
+              <svg viewBox="0 0 1024 1024" class="patient-dashboard-icon4">
+                <path d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"></path>
+              </svg>
+            </div>
+          </div>
+          <nav data-thq="thq-mobile-menu-nav-links" data-role="Nav" class="patient-dashboard-nav1">
+            <span class="patient-dashboard-text01">Features</span>
+            <span class="patient-dashboard-text02">How it works</span>
+            <span class="patient-dashboard-text03">Prices</span>
+            <span class="patient-dashboard-text04">Contact</span>
+            <a href="#book" class="patient-dashboard-book button button-main">
+              <img alt="image" src="/assets/external/calendar1.svg" class="patient-dashboard-image1">
+              <span class="patient-dashboard-text05">Book an appointment</span>
+            </a>
+          </nav>
+        </div>
       </div>
     </header>
-    <div class="dashboard-content">
-      <router-outlet *ngIf="isTabActive('appointments')"></router-outlet>
-      <router-outlet *ngIf="isTabActive('claims')"></router-outlet>
-      <router-outlet *ngIf="isTabActive('profile')"></router-outlet>
+    <div class="patient-dashboard-main">
+      <div class="patient-dashboard-content">
+        <div class="patient-dashboard-heading">
+          <h1 class="patient-dashboard-header">
+            <span class="patient-dashboard-text06">Welcome Back</span>
+            <br>
+            <span>Holder-Name</span>
+            <br>
+          </h1>
+          <p class="patient-dashboard-caption">At Deep Pills Health Center, we are committed to being your partner on your health journey. Schedule an appontment right now!</p>
+        </div>
+        <a href="/patient-dashboard#appointments" class="patient-dashboard-book1 button button-main">
+          <span>Schedule an Appointment</span>
+        </a>
+      </div>
+      <img alt="image" src="https://images.unsplash.com/photo-1524222928538-afb4409a0d70?ixid=M3w5MTMyMXwwfDF8c2VhcmNofDEzfHxjbGluaWN8ZW58MHx8fHwxNzAwMDE5ODEzfDA&amp;ixlib=rb-4.0.3&amp;w=300" class="patient-dashboard-image2">
+    </div>
+  </section>
+  <section id="profile" class="patient-dashboard-profile">
+    <div class="patient-dashboard-heading1">
+      <h2 class="patient-dashboard-header1">Profile</h2>
+    </div>
+  
+    
+    <form [formGroup]="updateForm" (ngSubmit)="updatePatientInfo()" class="patient-dashboard-form">
+      <div class="patient-dashboard-inputs">
+        <input type="text" formControlName="name" placeholder="Name" class="input book-input" />
+        <input type="text" formControlName="lastName" placeholder="Last Name" class="input book-input" />
+  
+        <mat-form-field>
+          <input matInput formControlName="dateOfBirth" [matDatepicker]="picker" placeholder="Date of Birth" readonly>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <input type="text" formControlName="phone" placeholder="Phone" class="input book-input" />
+        <input type="text" formControlName="email" placeholder="Email" class="input book-input" disabled />
+        
+        <select class="input profile-input" [(ngModel)]="selectedCity">
+          <option *ngFor="let city of cities">{{ city }}</option>
+        </select>
+        
+        <input type="file" placeholder="Profile Picture" class="input profile-input" />
+        
+        <select class="input profile-input" [(ngModel)]="selectedEps">
+          <option *ngFor="let eps of epsValues">{{ eps }}</option>
+        </select>
+        
+        <select class="input profile-input" [(ngModel)]="selectedBloodType">
+          <option *ngFor="let bloodType of bloodTypeValues">{{ bloodType }}</option>
+        </select>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Alergy</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let alergy of alergyValues">
+              <td>{{ alergy }}</td>
+              <td>
+                <button
+                  class="btn btn-sm"
+                  [class.btn-primary]="patientAlergies.includes(alergy)"
+                  (click)="toggleAlergy(alergy)"
+                >
+                  {{ patientAlergies.includes(alergy) ? 'Remove' : 'Add' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="patient-dashboard-button">
+          <button type="submit" class="patient-dashboard-book2 button button-main">
+            <span>Actualizar</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+  <section id="appointments" class="patient-dashboard-appointments">
+    <div class="patient-dashboard-heading2">
+      <h2 class="patient-dashboard-text11">Register Now</h2>
+      <p class="patient-dashboard-text12">
+        <span class="patient-dashboard-text13">Embark on your journey to optimal health by completing our simple and secure registration process. At Deep Pills, we prioritize your well-being and aim to make your healthcare experience as seamless as possible. By registering with us, you gain access to a world of personalized care and comprehensive health services.</span>
+        <br>
+      </p>
+    </div>
+    <div class="patient-dashboard-form">
+      <div class="patient-dashboard-inputs">
+        <input type="email" required placeholder="Email" autocomplete="email" class="input book-input">
+        <input type="email" required placeholder="Personal ID" autocomplete="email" class="input book-input">
+        <input type="password" required placeholder="Password" autocomplete="tel" class="input book-input">
+        <input type="password" required placeholder="Confirm your Password" class="input book-input">
+        <div class="patient-dashboard-lower">
+          <p class="patient-dashboard-text15">Please fill all the fields.</p>
+          <div class="patient-dashboard-button">
+            <button class="patient-dashboard-book2 button button-main">
+              <span>Register Now</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="claims" class="patient-dashboard-claims">
+    <div class="patient-dashboard-heading3">
+      <h2 class="patient-dashboard-text17">Know our Policies</h2>
+      <p class="patient-dashboard-text18">Our policies are designed to offer comprehensive plans and benefit packages tailored to meet your unique health needs. We understand that everyone&apos;s health journey is different, and our commitment is to provide you with flexible and inclusive options for a healthier, happier life.</p>
+    </div>
+    <div class="patient-dashboard-pricing">
+      <div class="patient-dashboard-card">
+        <div class="patient-dashboard-container2">
+          <span class="patient-dashboard-text19">Free</span>
+          <span class="patient-dashboard-text20">$0</span>
+          <span class="patient-dashboard-text21">Per month</span>
+        </div>
+        <span class="patient-dashboard-text22">Our Free plan gives you up to 3 monthly visits with our specialist for a single person at a Time.</span>
+        <button class="patient-dashboard-button1 button">Enroll</button>
+      </div>
+      <div class="patient-dashboard-card1">
+        <div class="patient-dashboard-container3">
+          <span class="patient-dashboard-text23">narcissus</span>
+          <span class="patient-dashboard-text24">$20.000</span>
+          <span class="patient-dashboard-text25">Per month</span>
+        </div>
+        <span class="patient-dashboard-text26">
+          <span>A personalized premium plan for those seeking individualized care. Perfect for those who value an exclusive and personal approach to their healthcare.</span>
+          <br>
+          <br>
+          <span>This plan includes 5 monthly visits for a single person.</span>
+        </span>
+        <button class="patient-dashboard-button2 button">Enroll</button>
+      </div>
+      <div class="patient-dashboard-card2">
+        <div class="patient-dashboard-container4">
+          <span class="patient-dashboard-text31">apolo</span>
+          <span class="patient-dashboard-text32">$22.000</span>
+          <span class="patient-dashboard-text33">Per month</span>
+        </div>
+        <span class="patient-dashboard-text34">
+          <span>Focused on appointment-based care. Ideal for those who prefer a more specific and scheduled approach to their regular healthcare.</span>
+          <br>
+          <br>
+          <span>This plan offers 8 monthly visits and up to 3 active members.</span>
+        </span>
+        <button class="patient-dashboard-button3 button">Enroll</button>
+      </div>
+      <div class="patient-dashboard-card3">
+        <div class="patient-dashboard-container5">
+          <span class="patient-dashboard-text39">Afrodite</span>
+          <span class="patient-dashboard-text40">$34.900</span>
+          <span class="patient-dashboard-text41">Per month</span>
+        </div>
+        <span class="patient-dashboard-text42">
+          <span>Tailored for couples seeking comprehensive and personalized healthcare. Perfect for maintaining holistic health for couples.</span>
+          <br>
+          <br>
+          <span>This plan includes 5 monthly visits and up to  2 active members. </span>
+        </span>
+        <button class="patient-dashboard-button4 button">Enroll</button>
+      </div>
+      <div class="patient-dashboard-card4">
+        <div class="patient-dashboard-container6">
+          <span class="patient-dashboard-text49">Hera</span>
+          <span class="patient-dashboard-text50">$69.900</span>
+          <span class="patient-dashboard-text51">Per month</span>
+        </div>
+        <span class="patient-dashboard-text52">
+          <span>Designed with the needs of nuclear families in mind, this plan ensures complete care for the entire family. Ideal for those seeking a comprehensive approach to family well-being.</span>
+          <br>
+          <br>
+          <span>This plan includes 10 monthly visits and up to 5 active members.</span>
+          <br>
+        </span>
+        <button class="patient-dashboard-button5 button">Enroll</button>
+      </div>
+      <div class="patient-dashboard-card5">
+        <div class="patient-dashboard-container7">
+          <span class="patient-dashboard-text58">demeter</span>
+          <span class="patient-dashboard-text59">$95.900</span>
+          <span class="patient-dashboard-text60">Per month</span>
+        </div>
+        <span class="patient-dashboard-text61">
+          <span>Tailored for extended families valuing health and well-being. With generous coverage, this plan provides comprehensive and flexible care for the entire extended family.</span>
+          <br>
+          <br>
+          <span>This plan includes 20 monthly visits and up to 10 active members.</span>
+        </span>
+        <button class="patient-dashboard-button6 button">Enroll</button>
+      </div>
+    </div>
+  </section>
+  <section id="memberships" class="patient-dashboard-memberships">
+    <div class="patient-dashboard-heading4">
+      <h2 class="patient-dashboard-text66">Register Now</h2>
+      <p class="patient-dashboard-text67">
+        <span class="patient-dashboard-text68">Embark on your journey to optimal health by completing our simple and secure registration process. At Deep Pills, we prioritize your well-being and aim to make your healthcare experience as seamless as possible. By registering with us, you gain access to a world of personalized care and comprehensive health services.</span>
+        <br>
+      </p>
+    </div>
+    <div class="patient-dashboard-form1">
+      <div class="patient-dashboard-inputs1">
+        <input type="email" required placeholder="Email" autocomplete="email" class="input book-input">
+        <input type="email" required placeholder="Personal ID" autocomplete="email" class="input book-input">
+        <input type="password" required placeholder="Password" autocomplete="tel" class="input book-input">
+        <input type="password" required placeholder="Confirm your Password" class="input book-input">
+        <div class="patient-dashboard-lower1">
+          <p class="patient-dashboard-text70">Please fill all the fields.</p>
+          <div class="patient-dashboard-button7">
+            <button class="patient-dashboard-book3 button button-main">
+              <span>Register Now</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
   <div id="contact" class="patient-dashboard-footer">
     <div class="patient-dashboard-left1">
       <div class="patient-dashboard-brand">
-        <img
-          alt="image"
-          src="/assets/external/logo-21.svg"
-          class="patient-dashboard-image2"
-        />
-        <p class="patient-dashboard-text6">
-          Here at Deep Pills, we care for you!
-        </p>
+        <img alt="image" src="/assets/external/logo-21.svg" class="patient-dashboard-image3">
+        <p class="patient-dashboard-text72">Here at Deep Pills, we care for you!</p>
       </div>
       <div class="patient-dashboard-legal">
-        <span class="patient-dashboard-copyright">
-          © 2023 DeepPills. All Rights Reserved.
-        </span>
+        <span class="patient-dashboard-copyright">© 2023 DeepPills. All Rights Reserved.</span>
       </div>
     </div>
     <div class="patient-dashboard-right1">
       <div class="patient-dashboard-list">
-        <span class="patient-dashboard-header">Menu</span>
+        <span class="patient-dashboard-header2">Menu</span>
         <div class="patient-dashboard-links1">
-          <span class="patient-dashboard-link05">Home</span>
-          <a href="" class="home-link05">Home</a>
-          <a routerLink="/log-in" class="home-link06">Login</a>
-          <a href="#register" class="home-link07">Register</a>
-          <a href="#policies" class="home-link08">Policies</a>
+          <span class="patient-dashboard-link06">Main</span>
+          <a href="#profile" class="patient-dashboard-link07">Profile</a>
+          <a href="#appointments" class="patient-dashboard-link08">Appointments</a>
+          <a href="#claims" class="patient-dashboard-link09">Claims</a>
+          <a href="#memberships" class="patient-dashboard-link10">Memberships</a>
         </div>
       </div>
       <div class="patient-dashboard-list1">
-        <span class="patient-dashboard-header1">Contact</span>
+        <span class="patient-dashboard-header3">Contact</span>
         <div class="patient-dashboard-links2">
-          <a
-            href="mailto:deep.pills.org@gmail.com?subject=Main"
-            class="patient-dashboard-link09"
-          >
-            deep.pills.org&#64;gmail.com
-          </a>
+          <a href="mailto:deep.pills.org&#64;gmail.com?subject=Main" class="patient-dashboard-link11">deep.pills.org&#64;gmail.com</a>
         </div>
       </div>
     </div>
@@ -78,9 +307,7 @@
         <span class="legal-link">Privacy Policy</span>
         <span class="legal-link">Terms of Use</span>
       </div>
-      <span class="patient-dashboard-copyright3">
-        © 2022 finbest. All Rights Reserved.
-      </span>
+      <span class="patient-dashboard-copyright3">© 2022 DeepPills. All Rights Reserved.</span>
     </div>
   </div>
 </div>

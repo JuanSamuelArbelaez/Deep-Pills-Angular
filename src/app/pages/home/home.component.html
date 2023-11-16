@@ -148,31 +148,34 @@
           placeholder="Email"
           autocomplete="email"
           class="input book-input"
+          #emailInput
         />
         <input
-          type="email"
+          type="text"
           required
           placeholder="Personal ID"
-          autocomplete="email"
+          autocomplete="personal id"
           class="input book-input"
+          #personalIdInput
         />
         <input
           type="password"
           required
           placeholder="Password"
-          autocomplete="tel"
           class="input book-input"
+          #passwordInput
         />
         <input
           type="password"
           required
           placeholder="Confirm your Password"
           class="input book-input"
+          #passwordConfirmInput
         />
         <div class="home-lower">
           <p class="home-text17">Please fill all the fields.</p>
           <div class="home-button">
-            <button class="home-book2 button button-main">
+            <button class="home-book2 button button-main" (click)="onRegister(emailInput.value, personalIdInput.value, passwordInput.value, passwordConfirmInput.value)">
               <span>Register Now</span>
             </button>
           </div>

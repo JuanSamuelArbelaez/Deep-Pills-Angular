@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common'
 import { ComponentsModule } from '../../components/components.module';
 import { LogIn } from './log-in.component'
 import { PatientDashboard } from '../patient-dashboard/patient-dashboard.component';
-import { ProfileComponent } from '../patient-dashboard/memberships/memberships.component';
 
 const routes = [
   {
@@ -14,11 +13,6 @@ const routes = [
   {
     path: '',
     component: PatientDashboard,
-    redirectTo: '/dashboard/profile',
-  },
-  {
-    path: 'profile',
-    component: ProfileComponent,
   },
 ]
 
