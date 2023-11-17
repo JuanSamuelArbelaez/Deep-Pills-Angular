@@ -66,6 +66,11 @@ export class PatientService {
     return this.httpClient.request<dtos.ResponseDTO>("get", url, { body:physicianSearchDTO }  );
   }
 
+  getAppointmentDetails(appoinmentId: number): Observable<dtos.ResponseDTO>{
+    const url = `${this.baseUrl}/appointments/details/${appoinmentId}`;
+    return this.httpClient.get<dtos.ResponseDTO>(url)
+  }
+
   //Claims Section --->
 
   newClaim(claimRegisterDTO: dtos.ClaimRegisterDTO): Observable<dtos.ResponseDTO> {

@@ -198,6 +198,7 @@ export class AppointmentDatePatientSearchDTO {
   export class InfoLoadPatientDTO {
     constructor(
       public id: number,
+      public patientPersonalId: string | null = null,
       public name: string | null = null,
       public lastName: string | null = null,
       public dateOfBirth: Date | null = null,
@@ -225,5 +226,32 @@ export class AppointmentDatePatientSearchDTO {
       public eps: string,
       public allergies: string[],
     ) {}
+  }
+
+  export class AppointmentDetailsDTO{
+    constructor(
+      public appointmentId: number,
+      public patientPersonalId: string,
+      public date: Date,
+      public time: Date,
+      public location: string,
+      public duration: number,
+      public requestTime: Date,
+      public detailedReasons: string,
+      public doctorsNotes: string,
+      public appointmentState: string,
+      public claims: ClaimDetailedItemPatientDTO[],
+      public treatments: AppointmentTreatmentPlanDTO[],
+      public emailsIds: number[],
+      public physicianInfo: PhysicianListingItemPatientDTO,
+      public symptoms: string[],
+    ){}
+  }
+
+  export class AppointmentTreatmentPlanDTO{
+    constructor(
+      public treatment: string,
+      public diagnosis: string
+    ){}
   }
   

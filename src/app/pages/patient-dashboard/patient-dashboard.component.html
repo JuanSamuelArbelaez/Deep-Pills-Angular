@@ -21,7 +21,7 @@
           </svg>
           <a href="mailto:deep.pills.org&#64;gmail.com?subject=Main" class="patient-dashboard-link05">deep.pills.org&#64;gmail.com</a>
         </button>
-        <button class="patient-dashboard-log-in button button-main">
+        <button class="patient-dashboard-log-in button button-main" (click)="logout()">
           <span class="patient-dashboard-text">Log Out</span>
         </button>
       </div>
@@ -59,7 +59,7 @@
           <h1 class="patient-dashboard-header">
             <span class="patient-dashboard-text06">Welcome Back</span>
             <br>
-            <span>Holder-Name</span>
+            <span #holderName>Holder-Name</span>
             <br>
           </h1>
           <p class="patient-dashboard-caption">At Deep Pills Health Center, we are committed to being your partner on your health journey. Schedule an appontment right now!</p>
@@ -74,93 +74,111 @@
   <section id="profile" class="patient-dashboard-profile">
     <div class="patient-dashboard-heading1">
       <h2 class="patient-dashboard-header1">Profile</h2>
-    </div>
-  
+      <form [formGroup]="updateForm" (ngSubmit)="updatePatientInfo()" class="patient-dashboard-form">
+        <div class="patient-dashboard-inputs">
+          <input type="text" formControlName="name" placeholder="Name" class="input book-input" />
+          <input type="text" formControlName="lastName" placeholder="Last Name" class="input book-input" />
     
-    <form [formGroup]="updateForm" (ngSubmit)="updatePatientInfo()" class="patient-dashboard-form">
-      <div class="patient-dashboard-inputs">
-        <input type="text" formControlName="name" placeholder="Name" class="input book-input" />
-        <input type="text" formControlName="lastName" placeholder="Last Name" class="input book-input" />
+          <mat-form-field>
+            <input matInput formControlName="dateOfBirth" [matDatepicker]="picker" placeholder="Date of Birth" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
   
-        <mat-form-field>
-          <input matInput formControlName="dateOfBirth" [matDatepicker]="picker" placeholder="Date of Birth" readonly>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <input type="text" formControlName="phone" placeholder="Phone" class="input book-input" />
-        <input type="text" formControlName="email" placeholder="Email" class="input book-input" disabled />
-        
-        <select class="input profile-input" [(ngModel)]="selectedCity">
-          <option *ngFor="let city of cities">{{ city }}</option>
-        </select>
-        
-        <input type="file" placeholder="Profile Picture" class="input profile-input" />
-        
-        <select class="input profile-input" [(ngModel)]="selectedEps">
-          <option *ngFor="let eps of epsValues">{{ eps }}</option>
-        </select>
-        
-        <select class="input profile-input" [(ngModel)]="selectedBloodType">
-          <option *ngFor="let bloodType of bloodTypeValues">{{ bloodType }}</option>
-        </select>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Alergy</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let alergy of alergyValues">
-              <td>{{ alergy }}</td>
-              <td>
-                <button
-                  class="btn btn-sm"
-                  [class.btn-primary]="patientAlergies.includes(alergy)"
-                  (click)="toggleAlergy(alergy)"
-                >
-                  {{ patientAlergies.includes(alergy) ? 'Remove' : 'Add' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <div class="patient-dashboard-button">
-          <button type="submit" class="patient-dashboard-book2 button button-main">
-            <span>Actualizar</span>
-          </button>
-        </div>
-      </div>
-    </form>
-  </section>
-  <section id="appointments" class="patient-dashboard-appointments">
-    <div class="patient-dashboard-heading2">
-      <h2 class="patient-dashboard-text11">Register Now</h2>
-      <p class="patient-dashboard-text12">
-        <span class="patient-dashboard-text13">Embark on your journey to optimal health by completing our simple and secure registration process. At Deep Pills, we prioritize your well-being and aim to make your healthcare experience as seamless as possible. By registering with us, you gain access to a world of personalized care and comprehensive health services.</span>
-        <br>
-      </p>
-    </div>
-    <div class="patient-dashboard-form">
-      <div class="patient-dashboard-inputs">
-        <input type="email" required placeholder="Email" autocomplete="email" class="input book-input">
-        <input type="email" required placeholder="Personal ID" autocomplete="email" class="input book-input">
-        <input type="password" required placeholder="Password" autocomplete="tel" class="input book-input">
-        <input type="password" required placeholder="Confirm your Password" class="input book-input">
-        <div class="patient-dashboard-lower">
-          <p class="patient-dashboard-text15">Please fill all the fields.</p>
+          <input type="text" formControlName="phone" placeholder="Phone" class="input book-input" />
+          <input type="text" formControlName="email" placeholder="Email" class="input book-input" disabled />
+          
+          <select class="input profile-input" [(ngModel)]="selectedCity">
+            <option *ngFor="let city of cities">{{ city }}</option>
+          </select>
+          
+          <input type="file" placeholder="Profile Picture" class="input profile-input" />
+          
+          <select class="input profile-input" [(ngModel)]="selectedEps">
+            <option *ngFor="let eps of epsValues">{{ eps }}</option>
+          </select>
+          
+          <select class="input profile-input" [(ngModel)]="selectedBloodType">
+            <option *ngFor="let bloodType of bloodTypeValues">{{ bloodType }}</option>
+          </select>
+  
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Alergy</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let alergy of alergyValues">
+                <td>{{ alergy }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm"
+                    [class.btn-primary]="patientAlergies.includes(alergy)"
+                    (click)="toggleAlergy(alergy)"
+                  >
+                    {{ patientAlergies.includes(alergy) ? 'Remove' : 'Add' }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
           <div class="patient-dashboard-button">
-            <button class="patient-dashboard-book2 button button-main">
-              <span>Register Now</span>
+            <button type="submit" class="patient-dashboard-book2 button button-main">
+              <span>Update</span>
             </button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   </section>
+  <section id="appointments" class="patient-dashboard-appointments">
+    <div class="patient-dashboard-heading2">
+      <h2 class="patient-dashboard-text11">Appointments</h2>
+      <button class="patient-dashboard-book2 button button-main" (click)="createNewAppointment()">
+        <span>New Appointment</span>
+      </button>
+      <div *ngIf="loadingAppointments" class="spinner">Loading...</div>
+  
+      <table *ngIf="!loadingAppointments && appointments">
+        <thead>
+          <tr>
+            <th>Appointment ID</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Duration (min)</th>
+            <th>State</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Verifica si la lista de appointments está vacía -->
+          <ng-container *ngIf="appointments.length > 0; else emptyRow">
+            <tr *ngFor="let appointment of appointments">
+              <td>{{ appointment.appointmentId }}</td>
+              <td>{{ appointment.date }}</td>
+              <td>{{ appointment.time }}</td>
+              <td>{{ appointment.duration }}</td>
+              <td>{{ appointment.appointmentState }}</td>
+              <td>
+                <button (click)="getAppointmentDetails(appointment.appointmentId)">
+                  See details
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #emptyRow>
+            <tr>
+              <td colspan="6">No appointments available.</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  
   <section id="claims" class="patient-dashboard-claims">
     <div class="patient-dashboard-heading3">
       <h2 class="patient-dashboard-text17">Know our Policies</h2>
@@ -175,77 +193,6 @@
         </div>
         <span class="patient-dashboard-text22">Our Free plan gives you up to 3 monthly visits with our specialist for a single person at a Time.</span>
         <button class="patient-dashboard-button1 button">Enroll</button>
-      </div>
-      <div class="patient-dashboard-card1">
-        <div class="patient-dashboard-container3">
-          <span class="patient-dashboard-text23">narcissus</span>
-          <span class="patient-dashboard-text24">$20.000</span>
-          <span class="patient-dashboard-text25">Per month</span>
-        </div>
-        <span class="patient-dashboard-text26">
-          <span>A personalized premium plan for those seeking individualized care. Perfect for those who value an exclusive and personal approach to their healthcare.</span>
-          <br>
-          <br>
-          <span>This plan includes 5 monthly visits for a single person.</span>
-        </span>
-        <button class="patient-dashboard-button2 button">Enroll</button>
-      </div>
-      <div class="patient-dashboard-card2">
-        <div class="patient-dashboard-container4">
-          <span class="patient-dashboard-text31">apolo</span>
-          <span class="patient-dashboard-text32">$22.000</span>
-          <span class="patient-dashboard-text33">Per month</span>
-        </div>
-        <span class="patient-dashboard-text34">
-          <span>Focused on appointment-based care. Ideal for those who prefer a more specific and scheduled approach to their regular healthcare.</span>
-          <br>
-          <br>
-          <span>This plan offers 8 monthly visits and up to 3 active members.</span>
-        </span>
-        <button class="patient-dashboard-button3 button">Enroll</button>
-      </div>
-      <div class="patient-dashboard-card3">
-        <div class="patient-dashboard-container5">
-          <span class="patient-dashboard-text39">Afrodite</span>
-          <span class="patient-dashboard-text40">$34.900</span>
-          <span class="patient-dashboard-text41">Per month</span>
-        </div>
-        <span class="patient-dashboard-text42">
-          <span>Tailored for couples seeking comprehensive and personalized healthcare. Perfect for maintaining holistic health for couples.</span>
-          <br>
-          <br>
-          <span>This plan includes 5 monthly visits and up to  2 active members. </span>
-        </span>
-        <button class="patient-dashboard-button4 button">Enroll</button>
-      </div>
-      <div class="patient-dashboard-card4">
-        <div class="patient-dashboard-container6">
-          <span class="patient-dashboard-text49">Hera</span>
-          <span class="patient-dashboard-text50">$69.900</span>
-          <span class="patient-dashboard-text51">Per month</span>
-        </div>
-        <span class="patient-dashboard-text52">
-          <span>Designed with the needs of nuclear families in mind, this plan ensures complete care for the entire family. Ideal for those seeking a comprehensive approach to family well-being.</span>
-          <br>
-          <br>
-          <span>This plan includes 10 monthly visits and up to 5 active members.</span>
-          <br>
-        </span>
-        <button class="patient-dashboard-button5 button">Enroll</button>
-      </div>
-      <div class="patient-dashboard-card5">
-        <div class="patient-dashboard-container7">
-          <span class="patient-dashboard-text58">demeter</span>
-          <span class="patient-dashboard-text59">$95.900</span>
-          <span class="patient-dashboard-text60">Per month</span>
-        </div>
-        <span class="patient-dashboard-text61">
-          <span>Tailored for extended families valuing health and well-being. With generous coverage, this plan provides comprehensive and flexible care for the entire extended family.</span>
-          <br>
-          <br>
-          <span>This plan includes 20 monthly visits and up to 10 active members.</span>
-        </span>
-        <button class="patient-dashboard-button6 button">Enroll</button>
       </div>
     </div>
   </section>

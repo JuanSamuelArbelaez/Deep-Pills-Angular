@@ -24,6 +24,24 @@ export class Home {
   }
 
   onRegister(email: string, personalId: string,  password: string, passwordConfirm: string): void {
+    if(email.length<1){
+      console.log('Fill your email address');
+      alert('Fill your email address');
+      return;
+    }
+
+    if(personalId.length<1){
+      console.log('Fill your personal Id');
+      alert('Fill your personal Id');
+      return;
+    }
+    
+    if(password.length<1){
+      console.log('Fill your password');
+      alert('Fill your password');
+      return;
+    }
+
     if(password != passwordConfirm){
       console.log('Passwords do not match.');
       alert('Passwords do not match.');

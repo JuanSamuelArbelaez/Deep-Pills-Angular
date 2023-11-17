@@ -3,12 +3,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { PatientService } from '../../services/patient.service';
-import { InfoLoadPatientDTO } from '../../models/model-dto';
 import { InfoUpdatePatientDTO } from '../../models/model-dto';
 import { TokenService } from 'src/app/services/token.service';
 import { Router } from '@angular/router';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
 import { EnumsService } from 'src/app/services/enums.service';
+import { AppointmentDetailsPopup } from './appointment-details-popup/appointment-details-popup.component'
 
 @Component({
   selector: 'patient-dashboard',
@@ -16,11 +16,13 @@ import { EnumsService } from 'src/app/services/enums.service';
   styleUrls: ['patient-dashboard.component.css'],
 })
 export class PatientDashboard implements OnInit {
+  holderName: string = "Holder-Name";
+
   cities: string[]; 
   epsValues: string[]; 
   bloodTypeValues: string[];
   alergyValues: string[];
-  patientAlergies: string[];
+  patientAlergies: string[] = [];
   selectedCity: string;
   selectedEps: string;
   selectedBloodType: string;
@@ -30,12 +32,18 @@ export class PatientDashboard implements OnInit {
   selectedDate: Date;
   originalFormValue: any
 
+  loadingAppointments: boolean = false;
+  appointments: any[]
+
+  patientPID: string = ""
+
   constructor(
+    private dialog: MatDialog,
     private fb: FormBuilder,
     private patientService: PatientService,
     private tokenService: TokenService,
     private enums: EnumsService,
-    private router: Router
+    private router: Router,
   ) {
     console.log('PatientDashboard component constructor');
     this.updateForm = this.fb.group({
@@ -94,10 +102,16 @@ export class PatientDashboard implements OnInit {
       }
     );
 
-    this.loadPatientInfo();
+    this.loadPatientAndAppointments()
+  }
+  
+  private async loadPatientAndAppointments() {
+    await this.loadPatientInfo();
+    console.log("Now proceeding to load appointments...");
+    this.loadAppointments('upcoming');
   }
 
-  loadPatientInfo() {
+  async loadPatientInfo() {
     console.log('Loading patient information...');
   
     if (this.tokenService.isLogged() === false) {
@@ -109,40 +123,40 @@ export class PatientDashboard implements OnInit {
   
     const patientId = this.tokenService.getUserId();
   
-    this.patientService.loadPatientInfo(patientId).subscribe(
-      (data) => {
-        const patientInfo = data.message;
-        console.log('Patient information loaded successfully:', patientInfo);
-        console.log(patientInfo);
-        console.dir(patientInfo);
+    try{
+      const data = await this.patientService.loadPatientInfo(patientId).toPromise();
+      const patientInfo = data.message;
+      console.log('Patient information loaded successfully:', patientInfo);
+      console.log(patientInfo);
+      this.patientPID = patientInfo.patientPersonalId
+      console.log("PID (prof): "+patientInfo.patientPersonalId+"->"+this.patientPID)
   
         // Utiliza patchValue o setValue para actualizar el formulario
-        this.updateForm.patchValue({
-          name: patientInfo.name,
-          lastName: patientInfo.lastName,
-          dateOfBirth: patientInfo.dateOfBirth,
-          phone: patientInfo.phone,
-          email: patientInfo.email,
-          city: patientInfo.city,
-          pic: patientInfo.pictureUrl,
-          bloodType: patientInfo.bloodType,
-          eps: patientInfo.eps,
-        });
+      this.updateForm.patchValue({
+        name: patientInfo.name,
+        lastName: patientInfo.lastName,
+        dateOfBirth: patientInfo.dateOfBirth,
+        phone: patientInfo.phone,
+        email: patientInfo.email,
+        city: patientInfo.city,
+        pic: patientInfo.pictureUrl,
+        bloodType: patientInfo.bloodType,
+        eps: patientInfo.eps,
+      });
 
-        this.patientAlergies = patientInfo.allergies;
+      this.patientAlergies = patientInfo.allergies;
   
         // Guarda el valor original del formulario
-        this.originalFormValue = this.updateForm.value;
+      this.originalFormValue = this.updateForm.value;
   
-        console.log('Form values after patching:', this.updateForm.value, this.patientAlergies);
-      },
-      (error) => {
-        console.error('Error al cargar la información del paciente', error);
-      }
-    );
+      console.log('Form values after patching:', this.updateForm.value, this.patientAlergies);
+    }
+    catch (error){
+      console.error('Error al cargar la información del paciente', error);
+    }
+    console.log('Form values after patching:', this.updateForm.value, this.patientAlergies);
   }
   
-
   updatePatientInfo() {
     if (this.updateForm.valid) {
       // Crea un objeto con solo los campos modificados
@@ -159,8 +173,8 @@ export class PatientDashboard implements OnInit {
         eps: this.updateForm.value.eps ?? null,
         allergies: this.patientAlergies,
       };
+      console.log(modifiedData)
 
-      // Envia solo los campos modificados al servicio
       this.patientService.updatePatientInfo(modifiedData).subscribe(
         (response) => {
           console.log(response);
@@ -175,15 +189,72 @@ export class PatientDashboard implements OnInit {
   }
 
   toggleAlergy(alergy: string) {
-    const index = this.patientAlergies.indexOf(alergy);
-
-    if (index !== -1) {
-      // La alergia está presente en la lista, eliminarla
-      this.patientAlergies.splice(index, 1);
-    } else {
-      // La alergia no está presente en la lista, agregarla
-      this.patientAlergies.push(alergy);
+    if (this.patientAlergies) {
+      const index = this.patientAlergies.indexOf(alergy);
+  
+      if (index !== -1) {
+        this.patientAlergies.splice(index, 1);
+      } else {
+        this.patientAlergies.push(alergy);
+      }
     }
+  }
+
+  loadAppointments(option: string) {
+    console.log("Loading "+option+" appointments...")
+    let serviceFunction;
+    switch (option) {
+      case 'all':
+        serviceFunction = this.patientService.getAllAppointments;
+        break;
+      case 'upcoming':
+        serviceFunction = this.patientService.getUpcomingAppointments;
+        break;
+      case 'past':
+        serviceFunction = this.patientService.getPastAppointments;
+        break;
+    }
+    console.log("waiting for pid...")
+    if (serviceFunction) {
+      serviceFunction.call(this.patientService, this.patientPID).subscribe(
+        (response) => {
+          this.loadingAppointments = false;
+          this.appointments = response.message;
+          console.log(response.message);
+        },
+        (error) => {
+          console.error('Error while loading the appointments', error);
+        }
+      );
+    } else {
+      console.error('Invalid option for loading appointments');
+    }
+  }
+
+  getAppointmentDetails(appointmentId: number) {
+    this.patientService.getAppointmentDetails(appointmentId).subscribe(
+      (response) => {
+        this.openAppointmentDetailsPopup(response.message);
+      },
+      (error) => {
+        console.error('Error al obtener los detalles de la cita', error);
+      }
+    );
+  }
+  
+  openAppointmentDetailsPopup(details: any) {
+    const dialogRef = this.dialog.open(AppointmentDetailsPopup, {
+      data: details,
+      width: '500px',
+    });
+  }
+  createNewAppointment() {
+  }
+
+  logout(){
+    this.tokenService.logout()
+    this.router.navigate(['/log-in']);
+    console.log('Logging out...');
   }
 }
 
