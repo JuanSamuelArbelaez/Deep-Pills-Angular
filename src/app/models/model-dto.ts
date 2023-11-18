@@ -81,14 +81,26 @@ export class AppointmentDatePatientSearchDTO {
   }
 
   export class ClaimDetailedItemPatientDTO {
-    constructor(claimId: number,
+    constructor(
+      public claimId: number,
       public personalId: string,
       public appointmentId: number,
       public claimDate: Date,
       public claimType: string,
       public details: string,
-      public claimStatus: string
+      public claimStatus: string,
+      public messages: ClaimMessageDTO[]
       ){}
+  }
+  export class ClaimMessageDTO{
+    constructor(
+      public claimId: number,
+      public message: string,
+      public date: Date,
+      public sender: number,
+      public recipient: number,
+      public messageType: string,
+    ){}
   }
   
   export class ClaimItemPatientDTO {
@@ -240,7 +252,7 @@ export class AppointmentDatePatientSearchDTO {
       public detailedReasons: string,
       public doctorsNotes: string,
       public appointmentState: string,
-      public claims: ClaimDetailedItemPatientDTO[],
+      public claims: ClaimItemPatientDTO[],
       public treatments: AppointmentTreatmentPlanDTO[],
       public emailsIds: number[],
       public physicianInfo: PhysicianListingItemPatientDTO,

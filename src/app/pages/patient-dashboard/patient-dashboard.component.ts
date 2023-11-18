@@ -3,12 +3,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { PatientService } from '../../services/patient.service';
-import { InfoUpdatePatientDTO } from '../../models/model-dto';
+import { AppointmentDatePatientSearchDTO, ClaimSearchDTO, InfoUpdatePatientDTO } from '../../models/model-dto';
 import { TokenService } from 'src/app/services/token.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { EnumsService } from 'src/app/services/enums.service';
 import { AppointmentDetailsPopup } from './appointment-details-popup/appointment-details-popup.component'
+import { ClaimsPopup } from './claims-popup/claims-popup.component';
 
 @Component({
   selector: 'patient-dashboard',
@@ -34,6 +35,9 @@ export class PatientDashboard implements OnInit {
 
   loadingAppointments: boolean = false;
   appointments: any[]
+
+  loadingClaims: boolean = false;
+  claims: any[]
 
   patientPID: string = ""
 
@@ -102,13 +106,14 @@ export class PatientDashboard implements OnInit {
       }
     );
 
-    this.loadPatientAndAppointments()
+    this.loadWindow()
   }
   
-  private async loadPatientAndAppointments() {
+  private async loadWindow() {
     await this.loadPatientInfo();
     console.log("Now proceeding to load appointments...");
     this.loadAppointments('upcoming');
+    this.loadClaims()
   }
 
   async loadPatientInfo() {
@@ -200,8 +205,8 @@ export class PatientDashboard implements OnInit {
     }
   }
 
-  loadAppointments(option: string) {
-    console.log("Loading "+option+" appointments...")
+  async loadAppointments(option: string) {
+    console.log("Loading " + option + " appointments...");
     let serviceFunction;
     switch (option) {
       case 'all':
@@ -213,23 +218,90 @@ export class PatientDashboard implements OnInit {
       case 'past':
         serviceFunction = this.patientService.getPastAppointments;
         break;
+      case 'onDate':
+        serviceFunction = this.patientService.getDateAppointments;
+        break;
     }
-    console.log("waiting for pid...")
     if (serviceFunction) {
-      serviceFunction.call(this.patientService, this.patientPID).subscribe(
-        (response) => {
-          this.loadingAppointments = false;
-          this.appointments = response.message;
-          console.log(response.message);
-        },
-        (error) => {
-          console.error('Error while loading the appointments', error);
-        }
-      );
+      if (option === 'onDate') {
+        const inputDate = await this.askForDate(); // Esperar a que se complete askForDate
+        console.log(inputDate)
+        serviceFunction.call(this.patientService,{
+          patientPersonalId: this.patientPID,
+          date: inputDate.toISOString().slice(0, 10) // Tomar solo la parte de la fecha
+        } 
+          ).subscribe(
+          (response) => {
+            this.loadingAppointments = false;
+            this.appointments = response.message;
+            console.log(response.message);
+          },
+          (error) => {
+            console.error('Error while loading the appointments', error);
+          }
+        );
+  
+      } else {
+        serviceFunction.call(this.patientService, this.patientPID).subscribe(
+          (response) => {
+            this.loadingAppointments = false;
+            this.appointments = response.message;
+            console.log(response.message);
+          },
+          (error) => {
+            console.error('Error while loading the appointments', error);
+          }
+        );
+      }
     } else {
       console.error('Invalid option for loading appointments');
     }
   }
+  
+  askForDate(): Promise<Date> {
+    return new Promise((resolve) => {
+      const date = '';
+      while (true) {
+        const yearInput = prompt('Ingrese el año:');
+        if (yearInput === null) {
+          // Si el usuario presiona Cancelar, salir del bucle
+          break;
+        }
+  
+        // Solicitar mes
+        const monthInput = prompt('Ingrese el mes:');
+        if (monthInput === null) {
+          // Si el usuario presiona Cancelar, salir del bucle
+          break;
+        }
+  
+        // Solicitar día
+        const dayInput = prompt('Ingrese el día:');
+        if (dayInput === null) {
+          // Si el usuario presiona Cancelar, salir del bucle
+          break;
+        }
+  
+        // Validar el formato de la fecha
+        const inputDate = new Date(`${yearInput}-${monthInput}-${dayInput}`);
+        if (isNaN(inputDate.getTime())) {
+          alert('Formato de fecha inválido. Por favor, inténtelo de nuevo.');
+          continue; // Reiniciar el bucle para solicitar la fecha nuevamente
+        }
+  
+        // Confirmar la fecha ingresada
+        const confirmation = confirm(`¿Es correcta la fecha ingresada?\n${inputDate.toDateString()}`);
+        if (confirmation) {
+          resolve(inputDate); // Resuelve la promesa con la fecha
+          break;
+        } else {
+          // El usuario no confirmó la fecha, reiniciar el bucle
+          continue;
+        }
+      }
+    });
+  }
+  
 
   getAppointmentDetails(appointmentId: number) {
     this.patientService.getAppointmentDetails(appointmentId).subscribe(
@@ -245,7 +317,7 @@ export class PatientDashboard implements OnInit {
   openAppointmentDetailsPopup(details: any) {
     const dialogRef = this.dialog.open(AppointmentDetailsPopup, {
       data: details,
-      width: '500px',
+      width: '800px',
     });
   }
   createNewAppointment() {
@@ -255,6 +327,39 @@ export class PatientDashboard implements OnInit {
     this.tokenService.logout()
     this.router.navigate(['/log-in']);
     console.log('Logging out...');
+  }
+
+  loadClaims() {
+    this.loadingClaims = true;
+    this.patientService.listAllClaims(this.patientPID).subscribe(
+      (response) => {
+        this.loadingClaims = false
+        this.claims = response.message;
+        console.log(response.message);
+      },
+      (error) => {
+        // Manejar el error si es necesario
+      },
+      () => {
+        this.loadingClaims = false;
+      }
+    );
+  }
+  viewClaimDetails(claimId: number){
+    this.patientService.seeClaimDetails(new ClaimSearchDTO(claimId, this.patientPID)).subscribe(
+      (response) =>{
+        this.openClaimsPopup(response.message)
+      }, (error)=>{
+        alert('Error fetching claim details')
+      }
+    )
+  }
+  
+  openClaimsPopup(details: any) {
+    const dialogRef = this.dialog.open(ClaimsPopup, {
+      data: details,
+      width: '800px',
+    });
   }
 }
 

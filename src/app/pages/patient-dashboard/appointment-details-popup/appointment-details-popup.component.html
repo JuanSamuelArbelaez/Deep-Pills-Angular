@@ -1,8 +1,26 @@
 <div>
 <h1>Appointment Details</h1>
 
+
 <!-- Detalles generales de la cita -->
-<p>Appointment ID: {{ data.appointmentId }}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <p>
+                        ID: {{ data.appointmentId }}
+                    </p>
+                </th>
+                <th>
+                    <button *ngIf="data.appointmentState === 'ACTIVE' || data.appointmentState === 'RESCHEDULED'" (click)="cancel(data.appointmentId)">Cancel</button>
+                </th>
+                <th>
+                    <button *ngIf="data.appointmentState === 'ACTIVE' || data.appointmentState === 'RESCHEDULED'" (click)="resh(data.appointmentId)">Reschedule</button>
+                </th>
+
+            </tr>
+        </thead>
+    </table> 
 <p>Patient ID: {{ data.patientPersonalId }}</p>
 <p>Date: {{ data.date | date }}</p>
 <p>Time: {{ data.time | date: 'hh:mm a' }}</p>
@@ -19,22 +37,16 @@
 <thead>
 <tr>
     <th>Claim ID</th>
-    <th>Personal ID</th>
-    <th>Appointment ID</th>
     <th>Claim Date</th>
     <th>Claim Type</th>
-    <th>Details</th>
     <th>Claim Status</th>
 </tr>
 </thead>
 <tbody>
 <tr *ngFor="let claim of data.claims">
     <td>{{ claim.claimId }}</td>
-    <td>{{ claim.personalId }}</td>
-    <td>{{ claim.appointmentId }}</td>
     <td>{{ claim.claimDate | date }}</td>
     <td>{{ claim.claimType }}</td>
-    <td>{{ claim.details }}</td>
     <td>{{ claim.claimStatus }}</td>
 </tr>
 </tbody>

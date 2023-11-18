@@ -102,7 +102,7 @@
             <option *ngFor="let bloodType of bloodTypeValues">{{ bloodType }}</option>
           </select>
   
-          <table class="table">
+          <table width="800px" class="table">
             <thead>
               <tr>
                 <th>Alergy</th>
@@ -141,8 +141,13 @@
         <span>New Appointment</span>
       </button>
       <div *ngIf="loadingAppointments" class="spinner">Loading...</div>
-  
-      <table *ngIf="!loadingAppointments && appointments">
+      <div class="appointment-options">
+        <button (click)="loadAppointments('all')">All</button>
+        <button (click)="loadAppointments('upcoming')">Upcoming</button>
+        <button (click)="loadAppointments('past')">Past</button>
+        <button (click)="loadAppointments('onDate')">On Date</button>
+      </div>
+      <table width="800px" *ngIf="!loadingAppointments && appointments">
         <thead>
           <tr>
             <th>Appointment ID</th>
@@ -181,21 +186,47 @@
   
   <section id="claims" class="patient-dashboard-claims">
     <div class="patient-dashboard-heading3">
-      <h2 class="patient-dashboard-text17">Know our Policies</h2>
-      <p class="patient-dashboard-text18">Our policies are designed to offer comprehensive plans and benefit packages tailored to meet your unique health needs. We understand that everyone&apos;s health journey is different, and our commitment is to provide you with flexible and inclusive options for a healthier, happier life.</p>
+      <h2 class="patient-dashboard-text17">Claims</h2>
+      <!-- Puedes agregar una descripción adicional aquí si es necesario -->
     </div>
-    <div class="patient-dashboard-pricing">
-      <div class="patient-dashboard-card">
-        <div class="patient-dashboard-container2">
-          <span class="patient-dashboard-text19">Free</span>
-          <span class="patient-dashboard-text20">$0</span>
-          <span class="patient-dashboard-text21">Per month</span>
-        </div>
-        <span class="patient-dashboard-text22">Our Free plan gives you up to 3 monthly visits with our specialist for a single person at a Time.</span>
-        <button class="patient-dashboard-button1 button">Enroll</button>
-      </div>
-    </div>
-  </section>
+  
+    <!-- Agrega la lógica de carga para mostrar un spinner si es necesario -->
+    <div *ngIf="loadingClaims" class="spinner">Loading...</div>
+  
+    <!-- Lista de reclamaciones -->
+    <table width="800px" *ngIf="!loadingClaims && claims">
+      <thead>
+        <tr>
+          <th>Claim ID</th>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Verifica si la lista de reclamaciones está vacía -->
+        <ng-container *ngIf="claims.length > 0; else emptyClaimsRow">
+          <tr *ngFor="let claim of claims">
+            <td>{{ claim.claimId }}</td>
+            <td>{{ claim.claimDate }}</td>
+            <td>{{ claim.claimType }}</td>
+            <td>{{ claim.claimStatus }}</td>
+            <td>
+              <!-- Agrega los botones de acción según tus requisitos -->
+              <button (click)="viewClaimDetails(claim.claimId)">See details</button>
+            </td>
+          </tr>
+        </ng-container>
+        <!-- Mensaje para cuando no hay reclamaciones disponibles -->
+        <ng-template #emptyClaimsRow>
+          <tr>
+            <td colspan="5">No claims available.</td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+  </section>  
   <section id="memberships" class="patient-dashboard-memberships">
     <div class="patient-dashboard-heading4">
       <h2 class="patient-dashboard-text66">Register Now</h2>

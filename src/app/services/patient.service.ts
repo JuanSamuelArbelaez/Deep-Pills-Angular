@@ -38,7 +38,7 @@ export class PatientService {
 
   cancelAppointment(appointmentId: number): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/appointments/cancel-appointment/${appointmentId}`;
-    return this.httpClient.request<dtos.ResponseDTO>("post", url);
+    return this.httpClient.get<dtos.ResponseDTO>(url);
   }
 
   getAllAppointments(patientPersonalId: string): Observable<dtos.ResponseDTO> {
@@ -58,12 +58,12 @@ export class PatientService {
 
   getDateAppointments(appointmentDatePatientSearchDTO: dtos.AppointmentDatePatientSearchDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/appointments/list-date`;
-    return this.httpClient.request<dtos.ResponseDTO>("get", url, { body:appointmentDatePatientSearchDTO }  );
+    return this.httpClient.post<dtos.ResponseDTO>(url, appointmentDatePatientSearchDTO );
 }
   
   listPhysicians(physicianSearchDTO: dtos.PhysicianSearchDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/appointments/list-physicians`;
-    return this.httpClient.request<dtos.ResponseDTO>("get", url, { body:physicianSearchDTO }  );
+    return this.httpClient.post<dtos.ResponseDTO>(url, physicianSearchDTO );
   }
 
   getAppointmentDetails(appoinmentId: number): Observable<dtos.ResponseDTO>{
@@ -83,51 +83,51 @@ export class PatientService {
     return this.httpClient.put<dtos.ResponseDTO>(url, claimAnswerDTO);
   }
 
-  listAllSolvedClaims(claimListingPatientDTO: dtos.ClaimListingPatientDTO): Observable<dtos.ResponseDTO> {
+  listAllClaimsBySatus(claimListingPatientDTO: dtos.ClaimListingPatientDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/claims/list-by-status`;
-    return this.httpClient.request<dtos.ResponseDTO>("get", url, { body: claimListingPatientDTO }  );
+    return this.httpClient.post<dtos.ResponseDTO>( url, claimListingPatientDTO);
   }
 
   listAllClaims(patientPersonalId: string): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/claims/list-all/${patientPersonalId}`;
-    return this.httpClient.request<dtos.ResponseDTO>("get", url);
+    return this.httpClient.get<dtos.ResponseDTO>(url);
   }
 
   searchClaim(claimSearchDTO: dtos.ClaimSearchDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/claims/claim-search`;
-    return this.httpClient.request<dtos.ResponseDTO>("get", url, {body: claimSearchDTO});
+    return this.httpClient.post<dtos.ResponseDTO>( url, claimSearchDTO);
   }
 
   seeClaimDetails(claimSearchDTO: dtos.ClaimSearchDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/claims/claim-details`;
-    return this.httpClient.request<dtos.ResponseDTO>("get", url, {body: claimSearchDTO});
+    return this.httpClient.post<dtos.ResponseDTO>( url, claimSearchDTO);
   }
 
   //membership section --->
 
   addPatientToMembership(membershipPatientModificationDTO: dtos.MembershipPatientModificationDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/membership/add-patient`;
-    return this.httpClient.request<dtos.ResponseDTO>("post", url, { body: membershipPatientModificationDTO }  );
+    return this.httpClient.put<dtos.ResponseDTO>( url, membershipPatientModificationDTO );
   }
 
   removePatientFromMembership(membershipPatientModificationDTO: dtos.MembershipPatientModificationDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/membership/remove-patient`;
-    return this.httpClient.request<dtos.ResponseDTO>("post", url, { body: membershipPatientModificationDTO }  );
+    return this.httpClient.post<dtos.ResponseDTO>( url, membershipPatientModificationDTO );
   }
 
   acquireMembership(membershipAcquirementDTO: dtos.MembershipAcquirementDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/membership/acquire-membership`;
-    return this.httpClient.request<dtos.ResponseDTO>("put", url, { body: membershipAcquirementDTO }  );
+    return this.httpClient.put<dtos.ResponseDTO>(url, membershipAcquirementDTO  );
   }
 
   resignMembership(patientPersonalId: string): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/membership/resign-membership/${patientPersonalId}`;
-    return this.httpClient.request<dtos.ResponseDTO>("post", url);
+    return this.httpClient.delete<dtos.ResponseDTO>(url);
   }
 
   makePaymentToMembershipCharge(membershipPaymentDTO: dtos.MembershipPaymentDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/membership/pay-charge`;
-    return this.httpClient.request<dtos.ResponseDTO>("post", url, { body: membershipPaymentDTO }  );
+    return this.httpClient.put<dtos.ResponseDTO>( url,  membershipPaymentDTO  );
   }
 
   getChargesFromMembership(chargeListDTO: dtos.ChargeListDTO): Observable<dtos.ResponseDTO> {
