@@ -66,6 +66,16 @@ export class PatientService {
     return this.httpClient.post<dtos.ResponseDTO>(url, physicianSearchDTO );
   }
 
+  getPhysicianSchedules(physicianId: number): Observable<dtos.ResponseDTO> {
+    const url = `${this.baseUrl}/appointments/get-physician-schedules/${physicianId}`
+    return this.httpClient.get<dtos.ResponseDTO>(url)
+  }
+
+  getHours(hourSearchDTO: dtos.HourSearchDTO): Observable<dtos.ResponseDTO>{
+    const url = `${this.baseUrl}/appointments/get-hours`
+    return this.httpClient.post<dtos.ResponseDTO>(url, hourSearchDTO)
+  }
+
   getAppointmentDetails(appoinmentId: number): Observable<dtos.ResponseDTO>{
     const url = `${this.baseUrl}/appointments/details/${appoinmentId}`;
     return this.httpClient.get<dtos.ResponseDTO>(url)
@@ -104,6 +114,11 @@ export class PatientService {
   }
 
   //membership section --->
+
+  getMembershipDetails(patientId: number): Observable<dtos.ResponseDTO> {
+    const url = `${this.baseUrl}/membership/details/${patientId}`
+    return this.httpClient.get<dtos.ResponseDTO>(url);
+  }
 
   addPatientToMembership(membershipPatientModificationDTO: dtos.MembershipPatientModificationDTO): Observable<dtos.ResponseDTO> {
     const url = `${this.baseUrl}/membership/add-patient`;

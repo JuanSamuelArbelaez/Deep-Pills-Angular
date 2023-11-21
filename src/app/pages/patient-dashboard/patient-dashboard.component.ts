@@ -3,13 +3,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { PatientService } from '../../services/patient.service';
-import { AppointmentDatePatientSearchDTO, ClaimSearchDTO, InfoUpdatePatientDTO } from '../../models/model-dto';
+import { AppointmentDatePatientSearchDTO, AppointmentDetailsDTO, AppointmentScheduleDTO, ClaimDetailedItemPatientDTO, ClaimSearchDTO, HourSearchDTO, InfoUpdatePatientDTO, PhysicianSearchDTO } from '../../models/model-dto';
 import { TokenService } from 'src/app/services/token.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { EnumsService } from 'src/app/services/enums.service';
-import { AppointmentDetailsPopup } from './appointment-details-popup/appointment-details-popup.component'
-import { ClaimsPopup } from './claims-popup/claims-popup.component';
+
 
 @Component({
   selector: 'patient-dashboard',
@@ -18,6 +17,9 @@ import { ClaimsPopup } from './claims-popup/claims-popup.component';
 })
 export class PatientDashboard implements OnInit {
   holderName: string = "Holder-Name";
+
+  dp: any;
+  date: any;
 
   cities: string[]; 
   epsValues: string[]; 
@@ -35,9 +37,42 @@ export class PatientDashboard implements OnInit {
 
   loadingAppointments: boolean = false;
   appointments: any[]
+  appointmentData: AppointmentDetailsDTO = {
+    "appointmentId": 0,
+    "patientPersonalId": "",
+    "date": new Date(),
+    "time": new Date(),
+    "location": "",
+    "duration": 0,
+    "requestTime": new Date(),
+    "detailedReasons": "",
+    "doctorsNotes": "",
+    "appointmentState": "",
+    "claims": [],
+    "treatments": [],
+    "emailsIds": [],
+    "physicianInfo": {
+        "physicianId": 0,
+        "name": "",
+        "lastName": ""
+    },
+    "symptoms": []
+  }
+
+  dateSelect: any[]
+  timeSelect: any[]
+  selectedSchedule: string = ""
+  selectedAppTime: string = "" 
+  physicians: any
+  selectedPhysician: any
+  reasons: string
+
+  specs: any[]
+  selectedSpecs: any
 
   loadingClaims: boolean = false;
   claims: any[]
+  claimData: any = {}
 
   patientPID: string = ""
 
@@ -47,7 +82,8 @@ export class PatientDashboard implements OnInit {
     private patientService: PatientService,
     private tokenService: TokenService,
     private enums: EnumsService,
-    private router: Router,
+    private router: Router
+
   ) {
     console.log('PatientDashboard component constructor');
     this.updateForm = this.fb.group({
@@ -106,6 +142,16 @@ export class PatientDashboard implements OnInit {
       }
     );
 
+    this.enums.getEnumValues('Specialization').subscribe(
+      (message) => {
+        console.log('Specializations loaded')
+        this.specs = message.message;
+      },
+      (error) => {
+        console.error('Error al obtener los valores de Specialization', error);
+      }
+    );
+
     this.loadWindow()
   }
   
@@ -131,11 +177,10 @@ export class PatientDashboard implements OnInit {
     try{
       const data = await this.patientService.loadPatientInfo(patientId).toPromise();
       const patientInfo = data.message;
+      this.holderName = patientInfo.name
       console.log('Patient information loaded successfully:', patientInfo);
       console.log(patientInfo);
       this.patientPID = patientInfo.patientPersonalId
-      console.log("PID (prof): "+patientInfo.patientPersonalId+"->"+this.patientPID)
-  
         // Utiliza patchValue o setValue para actualizar el formulario
       this.updateForm.patchValue({
         name: patientInfo.name,
@@ -284,6 +329,7 @@ export class PatientDashboard implements OnInit {
   
         // Validar el formato de la fecha
         const inputDate = new Date(`${yearInput}-${monthInput}-${dayInput}`);
+        inputDate.setDate(inputDate.getDate()+1)
         if (isNaN(inputDate.getTime())) {
           alert('Formato de fecha inválido. Por favor, inténtelo de nuevo.');
           continue; // Reiniciar el bucle para solicitar la fecha nuevamente
@@ -306,22 +352,16 @@ export class PatientDashboard implements OnInit {
   getAppointmentDetails(appointmentId: number) {
     this.patientService.getAppointmentDetails(appointmentId).subscribe(
       (response) => {
-        this.openAppointmentDetailsPopup(response.message);
+        this.appointmentData = response.message
+        console.log("app loaded: ",response)
       },
       (error) => {
         console.error('Error al obtener los detalles de la cita', error);
       }
     );
   }
+
   
-  openAppointmentDetailsPopup(details: any) {
-    const dialogRef = this.dialog.open(AppointmentDetailsPopup, {
-      data: details,
-      width: '800px',
-    });
-  }
-  createNewAppointment() {
-  }
 
   logout(){
     this.tokenService.logout()
@@ -348,18 +388,109 @@ export class PatientDashboard implements OnInit {
   viewClaimDetails(claimId: number){
     this.patientService.seeClaimDetails(new ClaimSearchDTO(claimId, this.patientPID)).subscribe(
       (response) =>{
-        this.openClaimsPopup(response.message)
+        this.claimData = response.message
+        console.log(this.claimData)
       }, (error)=>{
         alert('Error fetching claim details')
       }
     )
   }
+  canSchedule(){
+    if (!this.reasons || this.reasons.length<1) return false;
+    if (!this.selectedPhysician) return false;
+    if (!this.selectedSchedule || this.selectedSchedule.length<1) return false;
+    if (!this.selectedAppTime || this.selectedAppTime.length<1) return false
+    return true;
+  }
+  selectPhysician(physicianId: number) {
+    this.selectedPhysician = physicianId;
+    this.patientService.getPhysicianSchedules(physicianId).subscribe(
+      (response) => {
+        this.dateSelect = response.message
+        console.log(this.dateSelect);
+      },
+      (error) => {
+        alert('Error fetching physician schedules: ' + error.message);
+      }
+    );
+  }
   
-  openClaimsPopup(details: any) {
-    const dialogRef = this.dialog.open(ClaimsPopup, {
-      data: details,
-      width: '800px',
-    });
+  setSelectedSpec(spec: string){
+    this.selectedSpecs = spec
+  }
+  searchPhysicians(){
+    this.patientService.listPhysicians(new PhysicianSearchDTO(6, this.selectedSpecs)).subscribe(
+      (response) =>{
+        this.physicians = response.message
+        console.log(this.physicians)
+      }, (error)=>{
+        alert('Error fetching physicians: '+error.message)
+      }
+    )
+  }
+  ale(){
+    alert("creating new...")
+  }
+  selectDate(date: any){
+    this.selectedSchedule = date
+  }
+  loadHours(){
+    let scheduleId = Number(String(this.selectedSchedule).split(' ')[0])
+    this.patientService.getHours(new HourSearchDTO(this.selectedPhysician, scheduleId)).subscribe(
+      (response) =>{
+        this.timeSelect = response.message
+        console.log(this.timeSelect)
+      }, (error)=>{
+        alert('Error fetching physicians: '+error.message)
+      }
+    )
+  }
+  selectHour(hour: any){
+    console.log(hour)
+    alert(hour)
+
+  }
+  schedule() {
+    if(confirm('Do you wish to schedule this appointment?')){
+    let scheduleId = Number(String(this.selectedSchedule).split(' ')[0]);
+    let fechaDefault = new Date()  // Fecha por defecto (epoch time)
+    let [horas, minutos, segundos] = this.selectedAppTime.split(" ")[0].split(':').map(Number);
+    fechaDefault.setHours(horas, minutos, segundos);
+    console.log(this.selectedAppTime.split(" ")[0].split(':').map(Number))
+    console.log(fechaDefault)
+    let formatted = fechaDefault.toISOString();
+
+    console.log(formatted); 
+    let dto = new AppointmentScheduleDTO(this.tokenService.getUserId(), this.selectedPhysician, this.reasons, scheduleId, formatted)
+    console.log(dto)
+    this.patientService.scheduleAppointment(dto).subscribe(
+      (response) =>{
+        console.log(response.message)
+        alert(response.message)
+      }, (error)=>{
+        console.log(error.message)
+        alert(error.message)
+      }
+    )
+    }
+  }
+  cancel(appointmentId: number){
+    if(confirm('Do you wish to cancel this appointment?\nThis action cannot be undone.')){
+     this.patientService.cancelAppointment(appointmentId).subscribe(
+      (response)=>{
+        alert(response.message)
+      },
+      (error) => {
+        alert(error.message)
+      }
+     );
+    }
+  }
+  resh(appointmentId: number){
+    if(confirm('Do you wish to reschedule this appointment?')){
+      alert("Service not up now")
+     }
   }
 }
+
 

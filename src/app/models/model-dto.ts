@@ -29,11 +29,11 @@ export class ResponseDTO{
 
 export class AppointmentScheduleDTO {
     constructor(
-      public patientPersonalId: string,
-      public physicianPersonalId: string,
+      public patientId: number,
+      public physicianId: number,
       public reasons: string,
       public scheduleId: number,
-      public time: Date
+      public time: any
     ) {}
   }
   
@@ -266,4 +266,58 @@ export class AppointmentDatePatientSearchDTO {
       public diagnosis: string
     ){}
   }
+
+  export class HourOfferDTO {
+    constructor(
+      public scheduleId: number,
+      public startTime: Date,
+      public endTime: Date
+    ) {}
+  }
+  
+  export class HourSearchDTO {
+    constructor(
+      public physicianId: number,
+      public scheduleId: number) {}
+  }
+
+  export class ScheduleOfferDTO {
+    constructor(
+      public physicianId: number,
+      public date: Date,
+      public startTime: Date,
+      public endTime: Date
+    ) {}
+  }
+
+  export class MembershipDTO{
+    constructor(
+      public membershipID: number,
+      public owner: BeneficiaryDTO,
+      public date: Date,
+      public policy: PolicyDetailsDTO,
+      public beneficiaries: BeneficiaryDTO[],
+      public state: string
+      ){} 
+  }
+
+  export class BeneficiaryDTO{
+    constructor(
+    public beneficiaryPersonalId: string,
+    public name: string
+    ) {}
+  }
+
+  export class PolicyDetailsDTO{
+    constructor(
+      public policyId: number,
+      public name: string,
+      public description: string,
+      public cost: number,
+      public maxAppointments: number,
+      public maxPatients: number,
+      public policyState: string
+    ) {}
+  }
+
   
